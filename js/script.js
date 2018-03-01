@@ -4,9 +4,14 @@
 //****************** SERIOUSLY TEST USING console.log()!!! ******************
 
 $(document).ready(function(){
-  $("body").click(function(){
-  
-  });  
+  $("button").click(function(){
+      callGiphyAPIWithSearchTerm($("input").val(), 0);
+  });
+  $("input").click(function(){
+  for (var i = 1; i < 21; i = i + 1) {    
+      callGiphyAPIWithSearchTerm($("input").val(), i);
+  }
+  });
 
 });
   function giphyURLWithSearchTerm(searchTerm) {
@@ -15,23 +20,19 @@ $(document).ready(function(){
   }
 
   function appendImageToGallery(srcURL) {
-    $("body").append("<img src="+srcURL+">");
+    $("#output").html("<img id=output src="+srcURL+">");
   }
 
-  function callGiphyAPIWithSearchTerm(searchTerm) {
+  function callGiphyAPIWithSearchTerm(searchTerm, tempo) {
+    // use the giphyURLWithSearchTerm function to customize the url below
+    var giphyURL = "https://api.giphy.com/v1/stickers/search?q="+searchTerm+"&api_key=dc6zaTOxFJmzC";
     $.ajax({
-      url: "https://api.giphy.com/v1/stickers/search?q="+searchTerm+"&api_key=dc6zaTOxFJmzC",
+      url: giphyURL,
       method: "GET",
       success: function(response) {
-           // Log the whole response to the console
-            //console.log(response);
-           // Log the first image of the data to the console
-            console.log(response.data[0].url);
-           // Log the "type" property of the first image object to the console
-            console.log(response.data[0].type);
-           // Log the "title" property of the first image object to the console
-            console.log(response.data[0].title);
+           var url = response.data[tempo].images.original.url;
+           appendImageToGallery(url);
       },
-    }); 
-  }
+    });
+}
 
